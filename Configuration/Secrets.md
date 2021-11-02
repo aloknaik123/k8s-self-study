@@ -25,9 +25,30 @@ This repo contains code snippets of k8s secrets.
   ```
   </p>
 </details>
+
+<details><summary>2. Passing all entries of a Secret as environment variables at once</summary>
+  <p>
+    
+  ```
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: <pod-name>
+  spec:
+    containers:
+    - image: <image-name>
+      name: <container-name>
+      envFrom:
+      - prefix: CONFIG_ (optional)
+        secretRef:
+          name: <secret>
+  ...
+  ```
+  </p>
+</details>
     
 ## as files
-<details><summary>2. Using a secret volume to project secret entries into files</summary>
+<details><summary>3. Using a secret volume to project secret entries into files</summary>
   <p>
     
   ```
