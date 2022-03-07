@@ -1,0 +1,28 @@
+cat << EOF | kubectl apply -f -
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all
+  namespace: default
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+EOF
+
+kubectl run --generator=run-pod/v1 busybox1 --image=busybox -- sleep 3600
+kubectl run --generator=run-pod/v1 busybox2 --image=busybox -- sleep 3600
+
+kubectl get pod -o wide
+
+NAME       READY   STATUS    RESTARTS   AGE   IP            NODE                                           NOMINATED NODE   READINESS GATES
+busybox1   1/1     Running   0          69s   10.20.160.6   ip-192-168-76-80.eu-west-1.compute.internal    <none>           <none>
+busybox2   1/1     Running   0          51s   10.20.192.4   ip-192-168-76-114.eu-west-1.compute.internal   <none>           <none>
+
+kubectl exec -ti busybox2 -- ping -c3 10.20.160.6
+
+PING 10.20.160.6 (10.20.160.6): 56 data bytes
+
+--- 10.20.160.6 ping statistics ---
+3 packets transmitted, 0 packets received, 100% packet loss
