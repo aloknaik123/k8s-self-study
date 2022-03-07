@@ -1,0 +1,2 @@
+1) create a temporary POD
+kubectl run test-$RANDOM --image=alpine --labels="role=frontend" --rm -it -- sh
